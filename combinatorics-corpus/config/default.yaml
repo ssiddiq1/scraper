@@ -1,0 +1,129 @@
+# Combinatorics-corpus pipeline configuration.
+# All knobs live here. Changing this file changes the config hash and run identity.
+
+run:
+  run_id: null            # auto-generated if null
+  seed: 20260609          # determinism: audit sample + any random op uses this
+  parser_version: "0.1.0"
+
+# Category selection. Default = math.CO only. Widen by editing this list.
+# Adjacent ones the user has pre-approved as future opt-ins (still disabled here):
+#   cs.DM, math.PR, math.NT, cs.DS
+categories:
+  primary: ["math.CO"]
+  include_cross_listed: true   # include papers where math.CO is non-primary
+
+# Harvest window (inclusive on both ends). Months are walked one-by-one.
+date_range:
+  date_from: "2024-01-01"
+  date_to:   "2024-01-31"
+
+arxiv_api:
+  base_url: "https://export.arxiv.org/api/query"
+  rate_limit_s: 3.1            # arXiv asks ~1 req / 3 s
+  page_size: 1000              # results per page (cap 2000)
+  max_retries: 5
+  backoff_base_s: 2.0          # exponential backoff base
+
+s3:
+  enabled: false               # OFF by default — requester-pays, costs money
+  bucket: "arxiv"
+  prefix: "src/"
+  manifest_key: "src/arXiv_src_manifest.xml"
+  region: "us-east-1"
+  # AWS credentials taken from the standard chain; this run is requester-pays.
+
+eprint:
+  base_url: "https://arxiv.org/e-print/"
+  rate_limit_s: 3.1
+
+paths:
+  cache_dir: "data/cache"      # content-addressed source cache
+  output_dir: "data/output"    # corpus.db, parquet, audit_sample.jsonl, datasheet.md
+  db_filename: "corpus.db"
+
+extract:
+  # Standard theorem-like environment names. Custom ones from \newtheorem are added at runtime.
+  default_env_names:
+    - theorem
+    - thm
+    - lemma
+    - lem
+    - proposition
+    - prop
+    - corollary
+    - cor
+    - claim
+    - conjecture
+    - definition
+    - defn
+    - remark
+    - observation
+    - fact
+    - example
+    - proof
+  macro_expansion_max_depth: 6
+  # Sanity bounds for clean_text length, in characters.
+  min_char_len: 20
+  max_char_len: 5000
+
+classify:
+  # Transparent lexicon — terms hit case-insensitive, word-boundary regex.
+  lexicon:
+    - graph
+    - hypergraph
+    - digraph
+    - poset
+    - lattice
+    - partition
+    - permutation
+    - ramsey
+    - extremal
+    - enumeration
+    - generating function
+    - matroid
+    - design
+    - latin square
+    - chromatic
+    - independent set
+    - matching
+    - clique
+    - colouring
+    - coloring
+    - tournament
+    - tree
+    - forest
+    - bipartite
+    - hamiltonian
+    - eulerian
+    - regular graph
+    - cycle
+    - path
+    - vertex
+    - edge
+    - subgraph
+    - simplicial complex
+    - polytope
+    - young tableau
+    - symmetric function
+  bands:
+    high: 0.6
+    medium: 0.3
+    # below medium = low (flagged for audit)
+
+dedup:
+  jaccard_threshold: 0.9
+  minhash_perm: 128
+  shingle_size: 5          # word shingles for MinHash
+
+qc:
+  audit_sample_size: 100
+  # Thresholds: a run "passes" QC if these are met. They are gates, not deletions.
+  thresholds:
+    min_source_coverage: 0.95
+    min_balance_rate: 0.85
+    max_zero_extraction_rate: 0.40
+    min_audit_boundary_correctness: 0.90  # measured against gold fixture, reported honestly
+
+logging:
+  level: "INFO"

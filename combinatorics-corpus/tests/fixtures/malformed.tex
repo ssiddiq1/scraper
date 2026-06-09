@@ -1,0 +1,19 @@
+\documentclass{article}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\begin{document}
+
+\begin{theorem}\label{thm:goodone}
+A balanced statement about graph chromatic numbers.
+\end{theorem}
+
+\begin{lemma}\label{lem:bad}
+This lemma is intentionally never closed --- the \end is missing entirely
+so the extractor must mark it unbalanced without crashing.
+
+\begin{theorem}\label{thm:afterbad}
+A theorem AFTER the broken lemma. The extractor must still find this even
+though the previous block is unbalanced.
+\end{theorem}
+
+\end{document}

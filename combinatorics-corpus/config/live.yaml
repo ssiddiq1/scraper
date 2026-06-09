@@ -1,0 +1,120 @@
+# Live smoke run: a narrow Jan 2024 math.CO window.
+# Picked to be small enough that the 3s/paper e-print fetch completes in
+# minutes rather than tens of minutes.
+
+run:
+  run_id: null
+  seed: 20260609
+  parser_version: "0.1.0"
+
+categories:
+  primary: ["math.CO"]
+  include_cross_listed: true
+
+date_range:
+  date_from: "2024-01-02"
+  date_to:   "2024-01-04"
+
+arxiv_api:
+  base_url: "https://export.arxiv.org/api/query"
+  rate_limit_s: 3.1
+  page_size: 1000
+  max_retries: 5
+  backoff_base_s: 2.0
+
+s3:
+  enabled: false
+  bucket: "arxiv"
+  prefix: "src/"
+  manifest_key: "src/arXiv_src_manifest.xml"
+  region: "us-east-1"
+
+eprint:
+  base_url: "https://arxiv.org/e-print/"
+  rate_limit_s: 3.1
+
+paths:
+  cache_dir: "data/cache"
+  output_dir: "data/output_live"
+  db_filename: "corpus.db"
+
+extract:
+  default_env_names:
+    - theorem
+    - thm
+    - lemma
+    - lem
+    - proposition
+    - prop
+    - corollary
+    - cor
+    - claim
+    - conjecture
+    - definition
+    - defn
+    - remark
+    - observation
+    - fact
+    - example
+    - proof
+  macro_expansion_max_depth: 6
+  min_char_len: 20
+  max_char_len: 5000
+
+classify:
+  lexicon:
+    - graph
+    - hypergraph
+    - digraph
+    - poset
+    - lattice
+    - partition
+    - permutation
+    - ramsey
+    - extremal
+    - enumeration
+    - generating function
+    - matroid
+    - design
+    - latin square
+    - chromatic
+    - independent set
+    - matching
+    - clique
+    - colouring
+    - coloring
+    - tournament
+    - tree
+    - forest
+    - bipartite
+    - hamiltonian
+    - eulerian
+    - regular graph
+    - cycle
+    - path
+    - vertex
+    - edge
+    - subgraph
+    - simplicial complex
+    - polytope
+    - young tableau
+    - symmetric function
+  bands:
+    high: 0.6
+    medium: 0.3
+
+dedup:
+  jaccard_threshold: 0.9
+  minhash_perm: 128
+  shingle_size: 5
+
+qc:
+  audit_sample_size: 100
+  thresholds:
+    min_source_coverage: 0.95
+    min_balance_rate: 0.85
+    max_zero_extraction_rate: 0.40
+    min_audit_boundary_correctness: 0.90
+
+logging:
+  level: "INFO"

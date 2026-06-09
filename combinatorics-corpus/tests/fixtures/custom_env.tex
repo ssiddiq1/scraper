@@ -1,0 +1,20 @@
+\documentclass{article}
+\usepackage{amsthm}
+\newtheorem{ramseyclaim}{Ramsey Claim}
+\newtheorem{enumlemma}[ramseyclaim]{Enumeration Lemma}
+\begin{document}
+
+\begin{ramseyclaim}
+Every red/blue colouring of the edges of $K_6$ contains a monochromatic triangle.
+\end{ramseyclaim}
+
+\begin{enumlemma}
+The number of subsets of $[n]$ of size $k$ is $\binom{n}{k}$.
+\end{enumlemma}
+
+% Also include a standard env to make sure both are caught.
+\begin{theorem}
+A bipartite graph has no odd cycles.
+\end{theorem}
+
+\end{document}

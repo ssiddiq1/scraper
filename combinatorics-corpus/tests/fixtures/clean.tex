@@ -1,0 +1,27 @@
+\documentclass{article}
+\usepackage{amsmath, amsthm}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\title{A clean combinatorics paper}
+\begin{document}
+
+\section{Introduction}
+We study Ramsey numbers in bipartite graphs.
+
+\begin{theorem}\label{thm:main}
+For every graph $G$ on $n$ vertices, the chromatic number satisfies
+$\chi(G) \le \Delta(G) + 1$, where $\Delta(G)$ is the maximum degree.
+This generalizes the bound for permutation graphs studied in \cite{Smith2019, Doe2020}.
+\end{theorem}
+
+Some prose between the theorems.
+
+\begin{lemma}\label{lem:bound}
+Any tree on $n$ vertices has exactly $n-1$ edges. See \cite{Bollobas}.
+\end{lemma}
+
+\begin{proof}
+By induction on $n$.
+\end{proof}
+
+\end{document}

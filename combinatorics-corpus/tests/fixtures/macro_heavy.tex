@@ -1,0 +1,19 @@
+\documentclass{article}
+\usepackage{amsmath, amsthm}
+\newcommand{\bn}[1]{[#1]}
+\newcommand{\fall}[2]{#1^{\underline{#2}}}
+\newcommand{\Gf}{G(x)}
+\DeclareMathOperator{\Chrom}{chr}
+\def\NN{\mathbb{N}}
+\newtheorem{thm}{Theorem}
+
+\begin{document}
+
+\begin{thm}\label{thm:gf}
+Let $\NN$ be the natural numbers and $\bn{n} = \{1, 2, \dots, n\}$. The number
+of injections $\bn{k} \to \bn{n}$ equals the falling factorial $\fall{n}{k}$,
+with generating function $\Gf$. Moreover, $\Chrom(G) \le n$ for any graph $G$
+on $\bn{n}$ vertices.
+\end{thm}
+
+\end{document}
